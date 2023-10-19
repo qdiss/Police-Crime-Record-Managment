@@ -1,0 +1,86 @@
+.home {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='320' viewBox='0 0 1440 320'%3E%3Cpath fill='%233498db' fill-opacity='1' d='M0,160L60,144C120,128,240,96,360,85.3C480,75,600,85,720,128C840,171,960,245,1080,261.3C1200,277,1320,235,1380,213.3L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z'%3E%3C/path%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,160L60,144C120,128,240,96,360,85.3C480,75,600,85,720,128C840,171,960,245,1080,261.3C1200,277,1320,235,1380,213.3L1440,192L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #fff;
+    text-align: center;
+  }
+  
+.logo {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+}
+
+.home img {
+    height: 120px;
+    width: 120px;
+ }
+
+  .home .title-logo{
+    position: absolute;
+    top: 80px;
+    left: 175px;
+    color: #233498db;
+  }
+
+.home h1 {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: #233498db 0px 0px 10px;
+    border-radius: 10px;
+    padding: 10px;
+    width: 400px;
+    height: 230px;
+}
+
+.input-pair {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.input-pair label {
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.input-pair input {
+    width: 150px;
+    padding: 6px;
+    margin:0 15px;
+    border-radius: 5px;
+    border: #233498db 1px solid;
+}
+  
+.submit-btn{
+    margin-top: 10px;
+    padding: 10px 10px;
+    border-radius: 5px;
+    border: #233498db 1px solid;
+    background-color: #233498db;
+    color: #fff;
+    width: 140px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #fff;
+    color: #233498db;
+    transition: ease-in-out 0.4s;
+}

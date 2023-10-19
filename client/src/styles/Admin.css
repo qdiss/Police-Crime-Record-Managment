@@ -1,0 +1,82 @@
+body {
+    box-sizing: border-box;
+    position: relative;
+}
+
+.logotip {
+    position: absolute;
+    left: -18px;
+}
+
+.admin-home img {
+    height: 120px;
+    width: 120px;
+}
+
+.title-logotip {
+    position: absolute;
+    top: 40px;
+    left: 120px;
+    color: #233498db;
+    white-space: nowrap;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px 0;
+    background-color: #233498db;
+    color: #fff;
+    font-size: larger;
+    position: absolute;
+    height: 200px;
+    top: 180px;
+    left: 16px;
+    right: 16px;
+}
+
+.admin-home-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: absolute;
+    top: 400px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.admin-home-buttons button {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    height: 40px;
+    border-radius: 6px;
+    border: none;
+    background-color: #233498db;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    padding: 0;
+}
+
+.admin-home-buttons button svg {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.admin-home-buttons button:hover {
+    background-color: #fff;
+    border: 1px solid #233498db;
+    color: #233498db;
+}
+
+.login-info{
+    color: black;
+}
