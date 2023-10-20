@@ -64,6 +64,11 @@ body {
     padding: 0;
 }
 
+a{
+    text-decoration: none;
+    color: #fff;
+}
+
 .admin-home-buttons button svg {
     width: 1rem;
     height: 1rem;
@@ -77,6 +82,119 @@ body {
     color: #233498db;
 }
 
-.login-info{
-    color: black;
+.login-info {
+    position: absolute;
+    top: 140px;
+    right: 200px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.login-info h4{
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+    width: 50%;
+    box-shadow: #233498db 0px 0px 10px;
+}
+
+.dugme-x{
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem; 
+    color: #233498db;    
+}
+
+.dugme-x:hover{
+    color: #03040bdb;
+
+}
+
+.modal .modal-footer button:last-child {
+    background-color: #233498db;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 20px;
+    padding: 10px 10px;
+    border: none;
+    width: 200px;
+}
+
+.modal-title{
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #233498db;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal .modal-footer button:last-child:hover {
+    background-color: #fff;
+    border: 1px solid #233498db;
+    color: #233498db;
+    border-radius: 20px;
+    padding: 10px 10px;
+}
+
+.modal input,
+.modal select {
+    width: 110%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.modal label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #233498db;
+}
+
+.modal .form-control{
+    display: block;
+    width: 96%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.opcije-kontrola{
+    cursor: pointer;
+}
+
+/* Sakrijte kontrolu za povećanje i smanjenje (spin button) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
 }

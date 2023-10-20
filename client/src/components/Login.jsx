@@ -57,7 +57,7 @@ function Login({ role, changeRole, loginStatus, handleLogin }) {
             </label>
             <input
               className="username-input"
-              type="text"
+              type="number"
               id="username"
               name="username"
               value={username}

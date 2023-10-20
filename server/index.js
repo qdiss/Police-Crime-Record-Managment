@@ -15,12 +15,11 @@ const db = mysql.createConnection({
   database: "policijasistem",
 });
 
-app.get("/getLoginInfo/:username", (req, res) => {
-  const username = req.params.username;
-  const sql = "SELECT status, username FROM login WHERE username = ?";
-  db.query(sql, [username], (err, data) => {
+app.get("/getLoginInfo", (req, res) => {
+  const sql = "SELECT username, status FROM login WHERE status LIKE  'Admin' "; // preko statusa se dodjeljuje na frontend
+  db.query(sql, (err, data) => {
     if (err) {
-      return res.status(500).json({ error: "Error" });
+      return res.status(500).json("Error");
     }
     return res.status(200).json(data);
   });
@@ -40,7 +39,7 @@ app.post("/login", (req, res) => {
           username: username,
         };
 
-        if (username === "1107") {
+        if (username === "1107" || username === "1111") {
           returnData.role = "admin";
         } else {
           returnData.role = "user";
@@ -57,7 +56,23 @@ app.post("/login", (req, res) => {
   }
 });
 
-app.get("/api", (req, res) => {
+app.post("/addUserAdmin", (req, res) => {
+  const { staffid, ime, prezime, status, username, password } = req.body;
+  const sql =
+    "INSERT INTO login (staffid, ime, prezime, status, username, password) VALUES (?, ?, ?, ?, ?, ?)";
+  const values = [staffid, ime, prezime, status, username, password];
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.log("Greska pri dodavanju osoba u bazu " + err);
+      return res.status(500).json({ message: "Greška pri dodavanju osoblja" });
+    } else {
+      console.log("Osoblje uspješno dodano u bazu");
+      res.status(200).json({ message: "Osoblje uspješno dodano" });
+    }
+  });
+});
+
+app.get("/", (req, res) => {
   res.send("Hello World !");
 });
 
