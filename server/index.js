@@ -56,7 +56,7 @@ app.post("/login", (req, res) => {
   }
 });
 
-// Dodavanje osoblja u bazu
+// Dodavanje osoblja u bazu tabela "login"
 app.post("/addUserAdmin", (req, res) => {
   const { staffid, ime, prezime, status, username, password } = req.body;
   const sql =
@@ -73,7 +73,7 @@ app.post("/addUserAdmin", (req, res) => {
   });
 });
 
-// Dobavljanje osoblja
+// Dobavljanje osoblja tabela "login"
 app.get("/getStaffData", (req, res) => {
   const sql = "SELECT id, ime, prezime, status FROM login";
   db.query(sql, (err, data) => {
@@ -84,7 +84,7 @@ app.get("/getStaffData", (req, res) => {
   });
 });
 
-//Brisanje osoblja
+//Brisanje osoblja tabela "login"
 app.delete("/deleteStaff/:id", (req, res) => {
   const staffId = req.params.id;
   const sql = "DELETE FROM login WHERE id = ?";
@@ -99,7 +99,7 @@ app.delete("/deleteStaff/:id", (req, res) => {
   });
 });
 
-// Ruta za ažuriranje osoblja
+// Ruta za ažuriranje osoblja tabela "login"
 app.put("/updateStaff/:id", (req, res) => {
   const staffId = parseInt(req.params.id);
   const updatedData = req.body;
@@ -119,6 +119,19 @@ app.put("/updateStaff/:id", (req, res) => {
     } else {
       console.log("Osoba uspješno ažurirana u bazi");
       return res.status(200).json({ message: "Osoba uspješno ažurirana" });
+    }
+  });
+});
+
+//Dohvaćanje podataka iz tablice "case_table"
+app.get("/getCases", (req, res) => {
+  const query = "SELECT * FROM case_table";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Greška pri dohvaćanju podataka: " + err.message);
+      res.status(500).json({ error: "Greška pri dohvaćanju podataka" });
+    } else {
+      res.status(200).json(results);
     }
   });
 });

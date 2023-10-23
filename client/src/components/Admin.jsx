@@ -20,6 +20,7 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
   const [staff, setStaff] = useState([]);
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [showEditStaffModal, setShowEditStaffModal] = useState(false);
+  const [cases, setCases] = useState([]);
 
   useEffect(() => {
     if (!loginStatus) {
@@ -29,7 +30,6 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
       navigate("/userhome");
     }
 
-    // Fetch login info when the component mounts
     fetch("http://localhost:4000/getLoginInfo")
       .then((response) => response.json())
       .then((data) => {
@@ -45,6 +45,14 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
       })
       .catch((error) => {
         console.error("Error fetching staff data: " + error);
+      });
+
+    Axios.get("http://localhost:4000/getCases")
+      .then((response) => {
+        setCases(response.data);
+      })
+      .catch((error) => {
+        console.error("Greška pri dohvaćanju podataka: " + error);
       });
   }, [loginStatus, role, navigate]);
 
@@ -63,7 +71,6 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
   const handleShowAddStaff = () => setShowAddStaffModal(true);
   const handleShowViewStaff = () => {
     setShowViewStaffModal(true);
-    // Dodajte kod ovdje za dohvaćanje osoblja kad se otvori modal za pregled osoblja
   };
 
   const handleInputChange = (event) => {
@@ -74,24 +81,24 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
     });
   };
 
-  const handleShowViewCases = () => {};
+  const handleShowViewCases = () => {
+    setShowViewCasesModal(true);
+  };
 
   const handleShowEdit = (staff) => {
-    // Postavite podatke zaposlenika u stanje za uređivanje
     setFormData({
       ime: staff.ime,
       prezime: staff.prezime,
       status: staff.status,
     });
-    setSelectedStaff(staff); // Postavite trenutno selektiranog zaposlenika
-    setShowViewStaffModal(false); // Zatvorite trenutni modal za pregled
-    setShowEditStaffModal(true); // Otvorite novi modal za uređivanje
+    setSelectedStaff(staff);
+    setShowViewStaffModal(false);
+    setShowEditStaffModal(true);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Slanje POST zahtjeva s formData objektom kao tijelom
     try {
       const response = await fetch("http://localhost:4000/addUserAdmin", {
         method: "POST",
@@ -112,7 +119,6 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
     Axios.delete(`http://localhost:4000/deleteStaff/${staffId}`)
       .then((response) => {
         console.log(response.data.message);
-        // Osvježi listu osoblja nakon brisanja
         Axios.get("http://localhost:4000/getStaffData")
           .then((response) => {
             setStaff(response.data);
@@ -130,14 +136,12 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
   const handleEdit = async (event) => {
     event.preventDefault();
 
-    // Slanje PUT zahtjeva s formData objektom kao tijelom
     try {
       const response = await Axios.put(
         `http://localhost:4000/updateStaff/${selectedStaff.id}`,
         formData
       );
       if (response.status === 200) {
-        // Ažuriranje je uspješno, osvježite podatke o osoblju
         Axios.get("http://localhost:4000/getStaffData")
           .then((response) => {
             setStaff(response.data);
@@ -146,7 +150,7 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
             console.error("Error fetching staff data: " + error);
           });
 
-        handleClose(); // Zatvorite modal za uređivanje
+        handleClose();
       }
     } catch (error) {
       console.error("Greška pri slanju zahtjeva:", error);
@@ -282,11 +286,11 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Ime</th>
-                <th>Prezime</th>
-                <th>Status</th>
-                <th>Akcije</th>
+                <th className="naslov">ID</th>
+                <th className="naslov">Ime</th>
+                <th className="naslov">Prezime</th>
+                <th className="naslov">Status</th>
+                <th className="naslov">Akcije</th>
               </tr>
             </thead>
             <tbody>
@@ -331,7 +335,7 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
                 type="text"
                 placeholder="Unesite ime"
                 name="ime"
-                value={formData.ime} // Postavite trenutno ime zaposlenika
+                value={formData.ime}
                 onChange={handleInputChange}
               />
             </Form.Group>
@@ -342,7 +346,7 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
                 type="text"
                 placeholder="Unesite prezime"
                 name="prezime"
-                value={formData.prezime} // Postavite trenutno prezime zaposlenika
+                value={formData.prezime}
                 onChange={handleInputChange}
               />
             </Form.Group>
@@ -353,11 +357,11 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
                 as="select"
                 className="opcije-kontrola"
                 name="status"
-                value={formData.status} // Postavite trenutni status
+                value={formData.status}
                 onChange={handleInputChange}
               >
-                <option value="CID">KRD</option>
-                <option value="NCO">OFI</option>
+                <option value="CID">Krimi</option>
+                <option value="NCO">Oficir</option>
                 <option value="Admin">Admin</option>
               </Form.Control>
             </Form.Group>
@@ -370,7 +374,44 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showViewCasesModal} onHide={handleClose}></Modal>
+      <Modal show={showViewCasesModal} onHide={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Popis slučajeva</Modal.Title>
+          <AiOutlineClose onClick={handleClose} className="dugme-x" />
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th className="naslov">Broj Slučaja</th>
+                  <th className="naslov">Krivično djelo</th>
+                  <th className="naslov">Vrijeme prijave</th>
+                  <th className="naslov">Oficir</th>
+                  <th className="naslov">Krimi</th>
+                  <th className="naslov">Status istrage</th>
+                  <th className="naslov">Akcije</th>
+                </tr>
+              </thead>
+              <tbody className="popis">
+                {cases.map((caseData) => (
+                  <tr key={caseData.case_id}>
+                    <td>{caseData.case_id}</td>
+                    <td>{caseData.case_type}</td>
+                    <td>{caseData.date_added}</td>
+                    <td>{caseData.staffid}</td>
+                    <td>{caseData.cid}</td>
+                    <td>{caseData.status}</td>
+                    <Button variant="details" className="btn-details">
+                      Detalji
+                    </Button>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

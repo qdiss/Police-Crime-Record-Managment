@@ -188,7 +188,6 @@ a{
     cursor: pointer;
 }
 
-/* Sakrijte kontrolu za povećanje i smanjenje (spin button) */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -199,7 +198,6 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
-/* Stil za postavljanje iste širine za sve stupce u tablici */
 th,
 td {
     width: 4%;
@@ -211,7 +209,6 @@ td {
     font-size: 1rem;
 }
 
-/* Stil za gumb "Uredi" */
 .btn-info {
     border: 1px solid green;
         background: green;
@@ -223,7 +220,6 @@ td {
         margin: 10px;
 }
 
-/* Stil za gumb "Obriši" */
 .btn-danger {
     border: 1px solid red;
     background: red;
@@ -255,6 +251,31 @@ td, .btn-danger, .btn-info{
 }
 
 .btn-info:hover {
+    background-color: white;
+    border: 1px solid green;
+}
+
+.naslov{
+    color: black;
+}
+
+.btn-details{
+    border: 1px solid green;
+    background: green;
+    border-radius: 6px;
+    font-size: 16px;
+    color: white;
+    padding: 6px 6px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.btn-details:hover {
+    color: green;
+}
+
+.btn-details:hover {
     background-color: white;
     border: 1px solid green;
 }
