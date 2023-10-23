@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import $logoAdmin from "../images/mup.png";
 import "../styles/Admin.css";
 import { useNavigate } from "react-router-dom";
-import { FaHome, FaPlus } from "react-icons/fa";
+import { FaHome, FaPlus, FaTrash, FaPencilAlt } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Table } from "react-bootstrap";
+import Axios from "axios";
 
 function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
   const navigate = useNavigate();
@@ -13,11 +14,12 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
   const [formData, setFormData] = useState({
     ime: "",
     prezime: "",
-    staffid: "",
-    username: "",
-    lozinka: "",
     status: "CID",
   });
+
+  const [staff, setStaff] = useState([]);
+  const [selectedStaff, setSelectedStaff] = useState(null);
+  const [showEditStaffModal, setShowEditStaffModal] = useState(false);
 
   useEffect(() => {
     if (!loginStatus) {
@@ -36,6 +38,14 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
       .catch((error) => {
         console.error("Error fetching login info: " + error);
       });
+
+    Axios.get("http://localhost:4000/getStaffData")
+      .then((response) => {
+        setStaff(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching staff data: " + error);
+      });
   }, [loginStatus, role, navigate]);
 
   const [showAddStaffModal, setShowAddStaffModal] = useState(false);
@@ -46,12 +56,15 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
     setShowAddStaffModal(false);
     setShowViewStaffModal(false);
     setShowViewCasesModal(false);
+    setShowEditStaffModal(false);
     setModalTitle("Dodaj osoblje");
   };
 
   const handleShowAddStaff = () => setShowAddStaffModal(true);
-  const handleShowViewStaff = () => setShowViewStaffModal(true);
-  const handleShowViewCases = () => setShowViewCasesModal(true);
+  const handleShowViewStaff = () => {
+    setShowViewStaffModal(true);
+    // Dodajte kod ovdje za dohvaćanje osoblja kad se otvori modal za pregled osoblja
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -59,6 +72,20 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleShowViewCases = () => {};
+
+  const handleShowEdit = (staff) => {
+    // Postavite podatke zaposlenika u stanje za uređivanje
+    setFormData({
+      ime: staff.ime,
+      prezime: staff.prezime,
+      status: staff.status,
+    });
+    setSelectedStaff(staff); // Postavite trenutno selektiranog zaposlenika
+    setShowViewStaffModal(false); // Zatvorite trenutni modal za pregled
+    setShowEditStaffModal(true); // Otvorite novi modal za uređivanje
   };
 
   const handleSubmit = async (event) => {
@@ -79,6 +106,52 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
     } catch (error) {
       console.error("Greška pri slanju zahtjeva:", error);
     }
+  };
+
+  const handleDelete = (staffId) => {
+    Axios.delete(`http://localhost:4000/deleteStaff/${staffId}`)
+      .then((response) => {
+        console.log(response.data.message);
+        // Osvježi listu osoblja nakon brisanja
+        Axios.get("http://localhost:4000/getStaffData")
+          .then((response) => {
+            setStaff(response.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching staff data: " + error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error deleting staff: " + error);
+      });
+    alert("User deleted");
+  };
+
+  const handleEdit = async (event) => {
+    event.preventDefault();
+
+    // Slanje PUT zahtjeva s formData objektom kao tijelom
+    try {
+      const response = await Axios.put(
+        `http://localhost:4000/updateStaff/${selectedStaff.id}`,
+        formData
+      );
+      if (response.status === 200) {
+        // Ažuriranje je uspješno, osvježite podatke o osoblju
+        Axios.get("http://localhost:4000/getStaffData")
+          .then((response) => {
+            setStaff(response.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching staff data: " + error);
+          });
+
+        handleClose(); // Zatvorite modal za uređivanje
+      }
+    } catch (error) {
+      console.error("Greška pri slanju zahtjeva:", error);
+    }
+    alert("User updated");
   };
 
   return (
@@ -148,7 +221,7 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
             </Form.Group>
 
             <Form.Group controlId="formStaffNumber">
-              <Form.Label>ID Osobe</Form.Label>
+              <Form.Label>Staff ID</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Unesite broj osoblja"
@@ -199,7 +272,103 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Modal show={showViewStaffModal} onHide={handleClose}></Modal>
+
+      <Modal show={showViewStaffModal} onHide={handleClose}>
+        <Modal.Header>
+          <Modal.Title>{modalTitle}</Modal.Title>
+          <AiOutlineClose onClick={handleClose} className="dugme-x" />
+        </Modal.Header>
+        <Modal.Body>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Ime</th>
+                <th>Prezime</th>
+                <th>Status</th>
+                <th>Akcije</th>
+              </tr>
+            </thead>
+            <tbody>
+              {staff.map((staffItem) => (
+                <tr key={staffItem.id}>
+                  <td>{staffItem.id}</td>
+                  <td>{staffItem.ime}</td>
+                  <td>{staffItem.prezime}</td>
+                  <td>{staffItem.status}</td>
+                  <td>
+                    <Button
+                      variant="danger"
+                      onClick={() => handleDelete(staffItem.id)}
+                      className="btn-delete"
+                    >
+                      <FaTrash />
+                    </Button>
+                    <Button
+                      variant="info"
+                      onClick={() => handleShowEdit(staffItem)}
+                    >
+                      <FaPencilAlt />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showEditStaffModal} onHide={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Uredi osoblje</Modal.Title>
+          <AiOutlineClose onClick={handleClose} className="dugme-x" />
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleEdit}>
+            <Form.Group controlId="editFirstName">
+              <Form.Label>Ime</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Unesite ime"
+                name="ime"
+                value={formData.ime} // Postavite trenutno ime zaposlenika
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="editLastName">
+              <Form.Label>Prezime</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Unesite prezime"
+                name="prezime"
+                value={formData.prezime} // Postavite trenutno prezime zaposlenika
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="editStatus">
+              <Form.Label>Status</Form.Label>
+              <Form.Control
+                as="select"
+                className="opcije-kontrola"
+                name="status"
+                value={formData.status} // Postavite trenutni status
+                onChange={handleInputChange}
+              >
+                <option value="CID">KRD</option>
+                <option value="NCO">OFI</option>
+                <option value="Admin">Admin</option>
+              </Form.Control>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleEdit}>
+            Spremi
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Modal show={showViewCasesModal} onHide={handleClose}></Modal>
     </div>

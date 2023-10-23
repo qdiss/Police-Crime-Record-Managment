@@ -56,6 +56,7 @@ app.post("/login", (req, res) => {
   }
 });
 
+// Dodavanje osoblja u bazu
 app.post("/addUserAdmin", (req, res) => {
   const { staffid, ime, prezime, status, username, password } = req.body;
   const sql =
@@ -68,6 +69,56 @@ app.post("/addUserAdmin", (req, res) => {
     } else {
       console.log("Osoblje uspješno dodano u bazu");
       res.status(200).json({ message: "Osoblje uspješno dodano" });
+    }
+  });
+});
+
+// Dobavljanje osoblja
+app.get("/getStaffData", (req, res) => {
+  const sql = "SELECT id, ime, prezime, status FROM login";
+  db.query(sql, (err, data) => {
+    if (err) {
+      return res.status(500).json("Error");
+    }
+    return res.status(200).json(data);
+  });
+});
+
+//Brisanje osoblja
+app.delete("/deleteStaff/:id", (req, res) => {
+  const staffId = req.params.id;
+  const sql = "DELETE FROM login WHERE id = ?";
+  db.query(sql, [staffId], (err, result) => {
+    if (err) {
+      console.log("Greška pri brisanju osobe iz baze: " + err);
+      return res.status(500).json({ message: "Greška pri brisanju osobe" });
+    } else {
+      console.log("Osoba uspješno obrisana iz baze");
+      return res.status(200).json({ message: "Osoba uspješno obrisana" });
+    }
+  });
+});
+
+// Ruta za ažuriranje osoblja
+app.put("/updateStaff/:id", (req, res) => {
+  const staffId = parseInt(req.params.id);
+  const updatedData = req.body;
+
+  const sql = "UPDATE login SET ime = ?, prezime = ?, status = ? WHERE id = ?";
+  const values = [
+    updatedData.ime,
+    updatedData.prezime,
+    updatedData.status,
+    staffId,
+  ];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.log("Greška pri ažuriranju osobe u bazi: " + err);
+      return res.status(500).json({ message: "Greška pri ažuriranju osobe" });
+    } else {
+      console.log("Osoba uspješno ažurirana u bazi");
+      return res.status(200).json({ message: "Osoba uspješno ažurirana" });
     }
   });
 });

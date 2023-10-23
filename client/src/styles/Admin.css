@@ -198,3 +198,63 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
+
+/* Stil za postavljanje iste širine za sve stupce u tablici */
+th,
+td {
+    width: 4%;
+    text-align: center;
+    border: 1px solid #ddd;
+    gap: 10px;
+    color: #233498db;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* Stil za gumb "Uredi" */
+.btn-info {
+    border: 1px solid green;
+        background: green;
+        border-radius: 6px;
+        color: black;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        margin: 10px;
+}
+
+/* Stil za gumb "Obriši" */
+.btn-danger {
+    border: 1px solid red;
+    background: red;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+td, .btn-danger, .btn-info{
+    align-items: center;
+    margin: 10px
+}
+
+.btn-danger svg, .btn-info svg{
+    color: #fff;
+    margin: 10px 10px;
+}
+
+.btn-danger:hover svg{
+    color: red;
+}
+
+.btn-danger:hover{
+    background-color: white;
+    border: 1px solid red;
+}
+
+.btn-info:hover svg {
+    color: green;
+}
+
+.btn-info:hover {
+    background-color: white;
+    border: 1px solid green;
+}
