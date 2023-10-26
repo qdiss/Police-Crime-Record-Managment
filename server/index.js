@@ -123,13 +123,26 @@ app.put("/updateStaff/:id", (req, res) => {
   });
 });
 
-//Dohvaćanje podataka iz tablice "case_table"
+//Dohvaćanje podataka iz tabele "case_table"
 app.get("/getCases", (req, res) => {
   const query = "SELECT * FROM case_table";
-  db.query(query, (err, results) => {
+  db.query(query, (err, rezultat) => {
     if (err) {
       console.error("Greška pri dohvaćanju podataka: " + err.message);
       res.status(500).json({ error: "Greška pri dohvaćanju podataka" });
+    } else {
+      res.status(200).json(rezultat);
+    }
+  });
+});
+
+//Dohvaćanje krivicnih djela iz tabele "crime_type"
+app.get("/getCrimeType", (req, res) => {
+  const query = "SELECT des FROM crime_type";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.log("Greska dohvacanje podataka iz crime_type: " + err.message);
+      res.status(500).json({ error: "Greska i think" });
     } else {
       res.status(200).json(results);
     }

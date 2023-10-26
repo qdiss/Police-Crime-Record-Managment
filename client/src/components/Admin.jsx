@@ -277,7 +277,11 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showViewStaffModal} onHide={handleClose}>
+      <Modal
+        show={showViewStaffModal}
+        onHide={handleClose}
+        className="primarni-modal"
+      >
         <Modal.Header>
           <Modal.Title>{modalTitle}</Modal.Title>
           <AiOutlineClose onClick={handleClose} className="dugme-x" />
@@ -322,7 +326,11 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
         </Modal.Body>
       </Modal>
 
-      <Modal show={showEditStaffModal} onHide={handleClose}>
+      <Modal
+        show={showEditStaffModal}
+        onHide={handleClose}
+        className="primarni-modal"
+      >
         <Modal.Header>
           <Modal.Title>Uredi osoblje</Modal.Title>
           <AiOutlineClose onClick={handleClose} className="dugme-x" />
@@ -374,7 +382,11 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showViewCasesModal} onHide={handleClose}>
+      <Modal
+        show={showViewCasesModal}
+        onHide={handleClose}
+        className="osoblje-modal"
+      >
         <Modal.Header>
           <Modal.Title>Popis slučajeva</Modal.Title>
           <AiOutlineClose onClick={handleClose} className="dugme-x" />
@@ -402,9 +414,11 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
                     <td>{caseData.staffid}</td>
                     <td>{caseData.cid}</td>
                     <td>{caseData.status}</td>
-                    <Button variant="details" className="btn-details">
-                      Detalji
-                    </Button>
+                    <td>
+                      <Button variant="details" className="btn-details">
+                        Detalji
+                      </Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

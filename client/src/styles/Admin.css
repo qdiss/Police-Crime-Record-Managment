@@ -3,6 +3,33 @@ body {
     position: relative;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 .logotip {
     position: absolute;
     left: -18px;
@@ -188,15 +215,6 @@ a{
     cursor: pointer;
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
-}
 
 th,
 td {
@@ -268,7 +286,7 @@ td, .btn-danger, .btn-info{
     padding: 6px 6px;
     font-weight: 500;
     cursor: pointer;
-    margin: 10px;
+    width: 100px;
 }
 
 .btn-details:hover {
@@ -278,4 +296,36 @@ td, .btn-danger, .btn-info{
 .btn-details:hover {
     background-color: white;
     border: 1px solid green;
+}
+
+.primarni-modal {
+    position: absolute;
+    top: 500px;
+    left: 340px;
+    width: 55%;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 0 10px #233498db;
+    transform: translate(0, 0);
+    transition: transform 0.3s ease-in-out;
+}
+
+.osoblje-modal {
+    position: absolute;
+    top: 500px;
+    left: 340px;
+    width: 55%;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 0 10px #233498db;
+    transform: translate(0, 0);
+    transition: transform 0.3s ease-in-out;
 }
