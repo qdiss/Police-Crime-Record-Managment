@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Login from "./components/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminHome from "./components/Admin";
-import User from "./components/User";
+import OficirCID from "./components/OficirCID";
+import InspektorNCO from "./components/InspektorNCO";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
@@ -44,10 +45,21 @@ function App() {
             }
           />
           <Route
-            path="/userhome"
+            path="/cidhome"
             element={
-              <User
+              <OficirCID
                 role={role}
+                changeRole={changeRole}
+                handleLogin={handleLogin}
+                loginStatus={loginStatus}
+              />
+            }
+          />
+          <Route
+            path="/ncohome"
+            element={
+              <InspektorNCO
+                role={{ role }}
                 changeRole={changeRole}
                 handleLogin={handleLogin}
                 loginStatus={loginStatus}

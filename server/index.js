@@ -34,16 +34,21 @@ app.post("/login", (req, res) => {
         return res.status(500).json("Error");
       }
       if (data.length > 0) {
-        returnData = {
+        const user = data[0]; // Assuming there's only one matching user
+
+        const returnData = {
           message: "Login successful",
-          username: username,
+          username: user.username,
         };
 
-        if (username === "1107" || username === "1111") {
+        if (user.status === "Admin") {
           returnData.role = "admin";
-        } else {
-          returnData.role = "user";
+        } else if (user.status === "CID") {
+          returnData.role = "cid";
+        } else if (user.status === "NCO") {
+          returnData.role = "NCO";
         }
+
         return res.status(200).json(returnData);
       } else {
         return res.status(401).json({
@@ -132,6 +137,56 @@ app.get("/getCases", (req, res) => {
       res.status(500).json({ error: "Greška pri dohvaćanju podataka" });
     } else {
       res.status(200).json(rezultat);
+    }
+  });
+});
+
+app.get("/getCaseDetail", (req, res) => {
+  const query = "SELECT * FROM complainant";
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error("Greška pri dohvaćanju podataka: " + err.message);
+      res.status(500).json({ error: "Greška pri dohvaćanju podataka" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.post("/postCases", (req, res) => {
+  const {
+    case_id,
+    comp_name,
+    tel,
+    occupation,
+    age,
+    gender,
+    addrs,
+    region,
+    district,
+    loc,
+  } = req.body;
+  const sql =
+    "INSERT INTO complainant (case_id, comp_name, tel, occupation, age, gender, addrs, region, district, loc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  const values = [
+    case_id,
+    comp_name,
+    tel,
+    occupation,
+    age,
+    gender,
+    addrs,
+    region,
+    district,
+    loc,
+  ];
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.log("Greska pri dodavanju djela u bazu " + err);
+      return res.status(500).json({ message: "Greška pri dodavanju djela" });
+    } else {
+      console.log("Case uspješno dodano u bazu");
+      res.status(200).json({ message: "Dodano" });
     }
   });
 });

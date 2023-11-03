@@ -164,6 +164,25 @@ a {
     color: green;
 }
 
+.btn-obrisi {
+font-size: 15px;
+    font-weight: 500;
+    padding: 6px 10px;
+    margin: 5px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    background: red;
+    color: white;
+}
+
+.btn-obrisi:hover{
+    background: white;
+        border: 1px solid red;
+        color: red;
+}
+
 .glavni-modal {
     position: absolute;
     top: 500px;
@@ -263,4 +282,111 @@ a {
     color: #233498db;
     border-radius: 6px;
     padding: 10px 10px;
+}
+
+.btn-posalji {
+    background-color: #233498db;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 10px;
+    padding: 10px 10px;
+    border: none;
+    box-sizing: border-box;
+    width: 834px;
+}
+
+.btn-posalji:hover {
+    background-color: #fff;
+    border: 1px solid #233498db;
+    color: #233498db;
+    border-radius: 6px;
+    padding: 10px 10px;
+}
+
+.detailsViewNaslov {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #233498db;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.modal-button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.ModalDugmad {
+    width: fit-content;
+    height: 36px;
+    border-radius: 6px;
+    border: none;
+    background-color: #233498db;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    padding: 8px 8px;
+    margin-bottom: 0;
+}
+
+.ModalDugmad:hover {
+    background-color: #fff;
+    border: 1px solid #233498db;
+    color: #233498db;
+}
+
+.detailsViewContainer {
+    padding: 0 16px;
+    margin-top: 16px;
+    border: 1px solid #233498db;
+    border-radius: 10px;
+
+}
+
+.detailsViewHeader svg{
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.detailsViewTitle{
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #233498db;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.custom-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    border-top: 0.2px solid #374ab8db;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    padding: 10px 0;
+}
+
+.header-cell {
+    flex: 1;
+    text-align: left;
+    padding-right: 35px;
+    font-weight: 600;
+}
+
+.data-cell {
+    flex: 2;
+    text-align: left;
+    padding-left: 145px;
+    font-weight: 500;
 }

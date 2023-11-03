@@ -29,12 +29,19 @@ function Login({ role, changeRole, loginStatus, handleLogin }) {
       .then((res) => {
         if (res.data.message === "Login successful") {
           handleLogin(true);
-          if (res.data.role === "admin") {
-            changeRole("admin");
+          const role = res.data.role; // Get the role from the server response
+          console.log("Role received from server: " + res.data.role); // Add this line
+          changeRole(role); // Set the role in your state
+
+          // Route based on the role
+          if (role === "admin") {
             navigate("/adminhome");
-          } else {
-            changeRole("user");
-            navigate("/userhome");
+          }
+          if (role === "cid") {
+            navigate("/cidhome");
+          }
+          if (role === "NCO") {
+            navigate("/ncohome");
           }
         }
       })

@@ -27,7 +27,7 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
       navigate("/");
     }
     if (role !== "admin") {
-      navigate("/userhome");
+      navigate("/");
     }
 
     fetch("http://localhost:4000/getLoginInfo")
@@ -68,9 +68,17 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
     setModalTitle("Dodaj osoblje");
   };
 
-  const handleShowAddStaff = () => setShowAddStaffModal(true);
+  const handleShowAddStaff = () => {
+    setShowAddStaffModal(true);
+    setShowViewStaffModal(false);
+    setShowViewCasesModal(false);
+    setShowEditStaffModal(false);
+  };
   const handleShowViewStaff = () => {
     setShowViewStaffModal(true);
+    setShowAddStaffModal(false);
+    setShowViewCasesModal(false);
+    setShowEditStaffModal(false);
   };
 
   const handleInputChange = (event) => {
@@ -83,6 +91,9 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
 
   const handleShowViewCases = () => {
     setShowViewCasesModal(true);
+    setShowAddStaffModal(false);
+    setShowViewStaffModal(false);
+    setShowEditStaffModal(false);
   };
 
   const handleShowEdit = (staff) => {
@@ -94,6 +105,7 @@ function AdminHome({ role, changeRole, loginStatus, handleLogin, username }) {
     setSelectedStaff(staff);
     setShowViewStaffModal(false);
     setShowEditStaffModal(true);
+    setShowAddStaffModal(false);
   };
 
   const handleSubmit = async (event) => {
