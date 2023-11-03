@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import ReactToPrint from "react-to-print";
 import $logoUser from "../images/mup.png";
-import "../styles/User.css";
+import "../styles/OficirCID.css";
 import { useNavigate } from "react-router-dom";
-import { FaHome, FaUser, FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
+import {
+  FaHome,
+  FaUser,
+  FaPencilAlt,
+  FaPlus,
+  FaTrash,
+  FaPrint,
+} from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 import { Button, Modal, Form, Container } from "react-bootstrap";
 
@@ -11,9 +19,11 @@ import Axios from "axios";
 function OficirCID({ role, changeRole, loginStatus, handleLogin, username }) {
   const navigate = useNavigate();
   const [cases, setCases] = useState([]);
+  const [opis, setOpis] = useState([]);
   const [kriminalniTip, setCrimeType] = useState([]);
   const [krivicnoDjeloInput, setKrivicnoDjeloInput] = useState([]);
   const [randomCaseNumber, setRandomCaseNumber] = useState("");
+  const componentRef = useRef();
 
   useEffect(() => {
     if (loginStatus === false) {
@@ -45,6 +55,14 @@ function OficirCID({ role, changeRole, loginStatus, handleLogin, username }) {
       })
       .catch((error) => {
         console.error("1111 " + error);
+      });
+
+    Axios.get("http://localhost:4000/getOpis")
+      .then((response) => {
+        setOpis(response.data);
+      })
+      .catch((error) => {
+        console.error("BLA " + error);
       });
 
     // Generiraj jedinstveni 6-cifreni broj
@@ -111,6 +129,8 @@ function OficirCID({ role, changeRole, loginStatus, handleLogin, username }) {
     const distrikt = document.getElementById("formDistrikt").value;
     const lokacija = document.getElementById("formLokacija").value;
     const brojSlucaja = document.getElementById("formBrojSlucaja").value;
+    const krivicnoDjelo = document.getElementById("formKrivicnoDjelo").value;
+    const diaryOfAction = document.getElementById("formDiaryOfAction").value;
 
     Axios.post("http://localhost:4000/postCases", {
       case_id: brojSlucaja,
@@ -125,6 +145,14 @@ function OficirCID({ role, changeRole, loginStatus, handleLogin, username }) {
       gender: spol,
     }).then((response) => {
       alert("Uspješno ste dodali novi slučaj!");
+    });
+
+    Axios.post("http://localhost:4000/postCaseDetail", {
+      case_id: brojSlucaja,
+      case_type: krivicnoDjelo,
+      diaryofaction: diaryOfAction,
+    }).then((response) => {
+      console.log("Poslano ovo");
     });
 
     setShowAddCaseModal(false);
@@ -210,75 +238,119 @@ function OficirCID({ role, changeRole, loginStatus, handleLogin, username }) {
         </Modal.Body>
       </Modal>
 
-      <Modal show={detaljiView} className="modalni-ekran" onHide={handleClose}>
-        <Modal.Header className="modal-gore">
-          <Modal.Title className="detailsViewNaslov">
-            Detalji Slučaja
-          </Modal.Title>
-          <AiOutlineClose onClick={handleClose} className="dugme-x" />
-          <div className="modal-button-container">
-            <Button className="ModalDugmad">Print</Button>
-            <Button className="ModalDugmad">Status istrage</Button>
-            <Button className="ModalDugmad">Dodijeli Slučaj Drugom</Button>
-          </div>
+      {/* Detalji MODAL */}
 
-          <Container className="detailsViewContainer">
-            <Modal.Header className="detailsViewHeader">
-              <Modal.Title className="detailsViewTitle">
-                <FaUser className="korisnik-naslov" />
-                Detalji Osumnjičenog
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {krivicnoDjeloInput ? (
-                <div className="custom-table">
-                  {krivicnoDjeloInput.map((caseData) => (
-                    <div className="popis" key={caseData.case_id}>
-                      <div className="table-row">
-                        <div className="header-cell">Broj Slučaja:</div>
-                        <div className="data-cell">{caseData.case_id}</div>
+      <Modal show={detaljiView} className="modalni-ekran" onHide={handleClose}>
+        <div ref={componentRef} style={{ margin: 10 }}>
+          {" "}
+          <ReactToPrint
+            trigger={() => (
+              <Button className="ModalDugmad">
+                <FaPrint />
+              </Button>
+            )}
+            content={() => componentRef.current}
+          />
+          <Modal.Header className="modal-gore">
+            <ReactToPrint />
+            <Modal.Title className="detailsViewNaslov">
+              Detalji Slučaja
+            </Modal.Title>
+            <AiOutlineClose onClick={handleClose} className="dugme-x" />
+            <div className="modal-button-container">
+              <Button className="ModalDugmad">Status istrage</Button>
+              <Button className="ModalDugmad">Dodijeli Slučaj Drugom</Button>
+            </div>
+
+            <Container className="detailsViewContainer">
+              <Modal.Header className="detailsViewHeader">
+                <Modal.Title className="detailsViewTitle">
+                  <FaUser className="korisnik-naslov" />
+                  Detalji Osumnjičenog
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {krivicnoDjeloInput ? (
+                  <div className="custom-table">
+                    {krivicnoDjeloInput.map((crimeDjelo) => (
+                      <div className="popis" key={crimeDjelo.case_id}>
+                        <div className="table-row">
+                          <div className="header-cell">Broj Slučaja:</div>
+                          <div className="data-cell">{crimeDjelo.case_id}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="header-cell">Ime i Prezime:</div>
+                          <div className="data-cell">
+                            {crimeDjelo.comp_name}
+                          </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="header-cell">Spol:</div>
+                          <div className="data-cell">{crimeDjelo.gender}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="header-cell">Godine:</div>
+                          <div className="data-cell">{crimeDjelo.age}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="header-cell">Zanimanje:</div>
+                          <div className="data-cell">
+                            {crimeDjelo.occupation}
+                          </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="header-cell">Broj Telefona:</div>
+                          <div className="data-cell">{crimeDjelo.tel}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="header-cell">Distrikt:</div>
+                          <div className="data-cell">{crimeDjelo.district}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="header-cell">Regija:</div>
+                          <div className="data-cell">{crimeDjelo.region}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="header-cell">Lokacija:</div>
+                          <div className="data-cell">{crimeDjelo.loc}</div>
+                        </div>
                       </div>
-                      <div className="table-row">
-                        <div className="header-cell">Ime i Prezime:</div>
-                        <div className="data-cell">{caseData.comp_name}</div>
-                      </div>
-                      <div className="table-row">
-                        <div className="header-cell">Spol:</div>
-                        <div className="data-cell">{caseData.gender}</div>
-                      </div>
-                      <div className="table-row">
-                        <div className="header-cell">Godine:</div>
-                        <div className="data-cell">{caseData.age}</div>
-                      </div>
-                      <div className="table-row">
-                        <div className="header-cell">Zanimanje:</div>
-                        <div className="data-cell">{caseData.occupation}</div>
-                      </div>
-                      <div className="table-row">
-                        <div className="header-cell">Broj Telefona:</div>
-                        <div className="data-cell">{caseData.tel}</div>
-                      </div>
-                      <div className="table-row">
-                        <div className="header-cell">Distrikt:</div>
-                        <div className="data-cell">{caseData.district}</div>
-                      </div>
-                      <div className="table-row">
-                        <div className="header-cell">Regija:</div>
-                        <div className="data-cell">{caseData.region}</div>
-                      </div>
-                      <div className="table-row">
-                        <div className="header-cell">Lokacija:</div>
-                        <div className="data-cell">{caseData.loc}</div>
-                      </div>
-                    </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="data-cell">Podaci se učitavaju...</div>
+                )}
+              </Modal.Body>
+            </Container>
+            <div className="tabelaDiv">
+              <h2 className="detailsViewTitle"> Detalji slučaja</h2>
+              <table className="tabelaOpis">
+                <thead>
+                  <tr>
+                    <th className="naslov">Krivicno djelo</th>
+                    <th className="naslov">Diary of Action</th>
+                    <th className="naslov">Vrijeme prijave</th>
+                    <th className="naslov">NCO</th>
+                    <th className="naslov">CID</th>
+                    <th className="naslov">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="popisZaOpis">
+                  {opis.map((caseData) => (
+                    <tr key={caseData.case_id}>
+                      <td>{caseData.case_type}</td>
+                      <td>{caseData.diaryofaction}</td>
+                      <td>{caseData.date_added}</td>
+                      <td>{caseData.staffid}</td>
+                      <td>{caseData.cid}</td>
+                      <td>{caseData.status}</td>
+                    </tr>
                   ))}
-                </div>
-              ) : (
-                <div className="data-cell">Podaci se učitavaju...</div>
-              )}
-            </Modal.Body>
-          </Container>
-        </Modal.Header>
+                </tbody>
+              </table>
+            </div>
+          </Modal.Header>
+        </div>
       </Modal>
 
       {/* Zavrseno ADD MODAL*/}

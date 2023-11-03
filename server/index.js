@@ -191,6 +191,35 @@ app.post("/postCases", (req, res) => {
   });
 });
 
+app.post("/postCaseDetail", (req, res) => {
+  const { case_id, case_type, diaryofaction } = req.body;
+  const sql =
+    "INSERT INTO case_table (case_id, case_type, diaryofaction) VALUES (?, ?, ?)";
+  const values = [case_id, case_type, diaryofaction];
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.log("Greska pri dodavanju djela u bazu " + err);
+      return res.status(500).json({ message: "Greška pri dodavanju djela" });
+    } else {
+      console.log("Case uspješno dodano u bazu");
+      res.status(200).json({ message: "Dodano" });
+    }
+  });
+});
+
+app.get("/getOpis", (req, res) => {
+  const query = "SELECT * FROM case_table";
+  db.query(query, (err, result) => {
+    if (err) {
+      console.log("Greska pri dohvacanju opisa " + err);
+      return res.status(500).json({ message: "Greška pri dohvaćanju opisa" });
+    } else {
+      console.log("Opis uspjesno dohvacen");
+      res.status(200).json(result);
+    }
+  });
+});
+
 //Dohvaćanje krivicnih djela iz tabele "crime_type"
 app.get("/getCrimeType", (req, res) => {
   const query = "SELECT des FROM crime_type";

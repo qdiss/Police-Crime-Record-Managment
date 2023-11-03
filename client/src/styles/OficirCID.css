@@ -345,7 +345,7 @@ font-size: 15px;
     margin-top: 16px;
     border: 1px solid #233498db;
     border-radius: 10px;
-
+    margin-bottom: 30px;
 }
 
 .detailsViewHeader svg{
@@ -389,4 +389,23 @@ font-size: 15px;
     text-align: left;
     padding-left: 145px;
     font-weight: 500;
+}
+
+.tabelaDiv {
+    padding: 10px;
+    margin-top: 16px;
+    border: 1px solid #233498db;
+    border-radius: 10px;
+}
+
+.tabelaOpis {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.tabelaOpis th,
+.tabelaOpis td {
+    border: 1px solid #233498db;
+    padding: 4px;
+    text-align: left;
 }
