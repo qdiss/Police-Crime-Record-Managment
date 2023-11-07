@@ -1,0 +1,49 @@
+.modalno-ekran {
+    position: absolute;
+    top: 500px;
+    left: 340px;
+    width: 55%;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    z-index: 1000;
+    box-shadow: 0 0 10px #233498db;
+    transform: translate(0, 0);
+    transition: transform 0.3s ease-in-out;;
+}
+
+.detaljiViewContainer {
+    padding: 0 16px;
+    border: 1px solid #233498db;
+    border-radius: 10px;
+    margin-bottom: 0;
+}
+
+.btn-zaSlanje {
+    background: #233498db;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 10px;
+    padding: 10px 10px;
+    margin-bottom: 10px;
+    margin-top: 8px;
+    margin-left: 2px;
+    border: none;
+    box-sizing: border-box;
+    width: 784px;
+
+}
+
+.btn-zaSlanje:hover {
+    background-color: #fff;
+    border: 1px solid #233498db;
+    color: #233498db;
+    border-radius: 6px;
+    padding: 10px 10px;
+}
+.ql-editor{
+    height: 140px;
+}

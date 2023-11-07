@@ -104,6 +104,39 @@ app.delete("/deleteStaff/:id", (req, res) => {
   });
 });
 
+app.put("/obrisi-stavku/:id", (req, res) => {
+  const id = req.params.id;
+
+  // Prvo izbrišite iz tablice 'complainant'
+  const query1 = "DELETE FROM complainant WHERE case_id = ?";
+  db.query(query1, [id], (err1, result1) => {
+    if (err1) {
+      console.error("Greška prilikom brisanja stavke iz complainant: " + err1);
+      res
+        .status(500)
+        .json({ error: "Greška prilikom brisanja stavke iz complainant" });
+      return;
+    }
+
+    // Zatim izbrišite iz tablice 'case_table'
+    const query2 = "DELETE FROM case_table WHERE case_id = ?";
+    db.query(query2, [id], (err2, result2) => {
+      if (err2) {
+        console.error("Greška prilikom brisanja stavke iz case_table: " + err2);
+        res
+          .status(500)
+          .json({ error: "Greška prilikom brisanja stavke iz case_table" });
+        return;
+      }
+
+      console.log("Stavka uspješno obrisana iz obiju tablica");
+      res
+        .status(200)
+        .json({ message: "Stavka uspješno obrisana iz obe tablica" });
+    });
+  });
+});
+
 // Ruta za ažuriranje osoblja tabela "login"
 app.put("/updateStaff/:id", (req, res) => {
   const staffId = parseInt(req.params.id);
